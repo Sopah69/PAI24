@@ -25,21 +25,22 @@ def readfile(nomFichier):
 
 def add_ligne(txtLigne, indicesExtract, nbIdComm, J, iDep, res):
     converted_ligne = [0]*(J+nbIdComm) #On créer une liste contenant (le nombre de colonnes à extraire+nbIdComm) 0
-    ligne = txtLigne.split(";") #On créer une liste contenant les éléments de la lignes séparés par un ;
-    onlyDep = 0 # si le iDep est l'une des communes de la ligne alors onlyDep > 0 et on rajoute la ligne  à res, sinon on ne fait rien
+    ligne = txtLigne.split(";") #On créer une liste contenant les éléments de la lignes séparés par un ; en string
+    onlyDep = 0 # Indicateur permettant de savoir si la ligne correspond au département ou non
     
     i_r = 0     # indice lecture    (dans indicesExtract)
     i_w = 0     # indice écriture   (dans converted_ligne)
     while i_r < nbIdComm:
-        idCommune = ligne[indicesExtract[i_r]]
-        converted_ligne[i_w:i_w+2] = idCommune[:2], idCommune[2:]
-        if (iDep == None) or (converted_ligne[i_w] == iDep):
+        idCommune = ligne[indicesExtract[i_r]] #On extrait l'identifiant de la commune
+        converted_ligne[i_w:i_w+2] = idCommune[:2], idCommune[2:] #On remplit les 2 premières colonnes avec l'identifiant séparé en 2
+        if (iDep == None) or (converted_ligne[i_w] == iDep): #Si on a pas choisir de département ou la ligne correspond au département
             onlyDep += 1
         i_r += 1
-        i_w += 2
+        i_w += 2 #On incrémente l'indice d'écriture pour ne pas écrasé ce qui a déjà été écrit
             
-    if not(onlyDep):
-        return(res)
+    if not(onlyDep): #Ne se fait que si onlyDep=0 ==> la ligne ne correspond pas au département
+        return(res) #On retourne res sans l'avoir modifié
+      
     for i in indicesExtract[i_r:]:
         converted_ligne[i_w] = cint(ligne[i])
         i_w += 1
@@ -66,7 +67,7 @@ def extractUsefulData(txtDataBrut, iData, iDep = None):
     N = len(txtDataBrut) #Nombre de lignes du document
     res = []
     for i in range(1,N):
-        add_ligne(txtDataBrut[i], indicesExtract, nbIdComm, J, iDep, res)
+        add_ligne(txtDataBrut[i], indicesExtract, nbIdComm, J, iDep, res) #Traitement pour chaque ligne
     return(res)
 
 def loadData(txtNomFichier, iData, iDep = None):
