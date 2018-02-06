@@ -24,8 +24,8 @@ def readfile(nomFichier):
     return(data)
 
 def add_ligne(txtLigne, indicesExtract, nbIdComm, J, iDep, res):
-    converted_ligne = [0]*(J+nbIdComm)
-    ligne = txtLigne.split(";")
+    converted_ligne = [0]*(J+nbIdComm) #On créer une liste contenant (le nombre de colonnes à extraire+nbIdComm) 0
+    ligne = txtLigne.split(";") #On créer une liste contenant les éléments de la lignes séparés par un ;
     onlyDep = 0 # si le iDep est l'une des communes de la ligne alors onlyDep > 0 et on rajoute la ligne  à res, sinon on ne fait rien
     
     i_r = 0     # indice lecture    (dans indicesExtract)
@@ -57,13 +57,13 @@ def extractUsefulData(txtDataBrut, iData, iDep = None):
     Paramètre iDep = extraction des données du département n° iDep
     """
     if iData == 1:
-        indicesExtract = [0,5,9]
-        nbIdComm = 1
+        indicesExtract = [0,5,9] #0 : Département et commune du lieu de résidence; 5 : CSP; 9 : Indicateur du lieu de travail
+        nbIdComm = 1 #Utilité ?
     elif iData == 2:
         indicesExtract = [0,2,4]
-        nbIdComm = 2
-    J = len(indicesExtract)
-    N = len(txtDataBrut)
+        nbIdComm = 2 #Utilité ?
+    J = len(indicesExtract) #Nombre de colonnes à extraire
+    N = len(txtDataBrut) #Nombre de lignes du document
     res = []
     for i in range(1,N):
         add_ligne(txtDataBrut[i], indicesExtract, nbIdComm, J, iDep, res)
